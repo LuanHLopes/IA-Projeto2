@@ -38,7 +38,7 @@ public class LeitorArquivo {
                         int peso = Integer.parseInt(partes[2].trim());
                         grafo.setAresta(origem, destino, peso);
                     }
-                } else if (linha.startsWith("h(")) { // [cite: 42, 43, 44, 45, 46, 47]
+                } else if (linha.startsWith("h(")) {
                     String[] partes = extrairConteudo(linha).split(",");
                     if (partes.length == 3) {
                         String noLabel = partes[0].trim();
