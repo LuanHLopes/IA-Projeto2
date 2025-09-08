@@ -50,7 +50,7 @@ public class AEstrela {
 
             imprimirMetricas(nosExpandidos, nosGerados);
 
-            No atual = fronteira.poll().no();
+            No atual = Objects.requireNonNull(fronteira.poll()).no();
 
             if (atual.equals(noFinal)) {
                 System.out.println("\nFim da execução");

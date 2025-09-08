@@ -4,14 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class No {
-    public String label;
-    public int heuristica;
-    private List<Aresta> arestas;
+
+    public enum Cor { BRANCO, CINZA, PRETO }
+
+    private final String label;
+    private int heuristica;
+    private final List<Aresta> arestas;
+
+    private Cor cor;
+    private No predecessor;
 
     public No(String label) {
         this.label = label;
-        arestas = new ArrayList<>();
         this.heuristica = 0;
+        this.arestas = new ArrayList<>();
+        this.cor = Cor.BRANCO;
+        this.predecessor = null;
     }
 
     public void setAresta(No destino, int peso) {
@@ -20,10 +28,6 @@ public class No {
 
     public String getLabel() {
         return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public int getHeuristica() {
@@ -36,5 +40,21 @@ public class No {
 
     public List<Aresta> getArestas() {
         return arestas;
+    }
+
+    public Cor getCor() {
+        return cor;
+    }
+
+    public void setCor(Cor cor) {
+        this.cor = cor;
+    }
+
+    public No getPredecessor() {
+        return predecessor;
+    }
+
+    public void setPredecessor(No predecessor) {
+        this.predecessor = predecessor;
     }
 }

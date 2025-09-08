@@ -1,17 +1,18 @@
 package main;
 
-import algoritmos.AEstrela;
+import algoritmos.*;
 import utils.LeitorArquivo;
 import utils.DadosArquivo;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static boolean grafoCarregado = false;
-    private static DadosArquivo dadosDoGrafo = null;
+    private static DadosArquivo dadosGrafo = null;
 
     public static void main(String[] args) {
         while (true) {
@@ -91,40 +92,62 @@ public class Main {
         String caminhoCompleto = "src/arquivos/" + nomeArquivo;
 
         try {
-            dadosDoGrafo = LeitorArquivo.carregarGrafo(caminhoCompleto);
+            dadosGrafo = LeitorArquivo.carregarGrafo(caminhoCompleto);
             grafoCarregado = true;
             System.out.println("\nArquivo lido e grafo montado com sucesso!");
 
             System.out.println("--- Informações do Grafo Carregado ---");
-            System.out.println("Ponto Inicial: " + dadosDoGrafo.noInicialLabel());
-            System.out.println("Ponto Final: " + dadosDoGrafo.noFinalLabel());
-            String tipoGrafo = dadosDoGrafo.grafo().isOrientado() ? "Grafo Orientado" : "Grafo Não Orientado";
+            System.out.println("Ponto Inicial: " + dadosGrafo.noInicialLabel());
+            System.out.println("Ponto Final: " + dadosGrafo.noFinalLabel());
+            String tipoGrafo = dadosGrafo.grafo().isOrientado() ? "Grafo Orientado" : "Grafo Não Orientado";
             System.out.println("Tipo de Grafo: " + tipoGrafo);
             System.out.println("----------------------------------------");
 
         } catch (IOException e) {
             grafoCarregado = false;
-            dadosDoGrafo = null;
+            dadosGrafo = null;
             System.err.println("\nERRO: Não foi possível ler o arquivo. Verifique o nome e o formato.");
             System.err.println("Detalhes: " + e.getMessage());
         }
     }
 
     private static void executarDFS() {
-        System.out.println("\n--- Executando Busca em Profunidade (DFS) ---");
+        System.out.println("\n--- Executando Busca em Profundidade (DFS) ---");
+        DFS.executar(
+                dadosGrafo.grafo(),
+                dadosGrafo.noInicialLabel(),
+                dadosGrafo.noFinalLabel(),
+                scanner
+        );
     }
 
     private static void executarAEstrela() {
         System.out.println("\n--- Executando A* (A-Estrela) ---");
         AEstrela.executar(
-                dadosDoGrafo.grafo(),
-                dadosDoGrafo.noInicialLabel(),
-                dadosDoGrafo.noFinalLabel(),
+                dadosGrafo.grafo(),
+                dadosGrafo.noInicialLabel(),
+                dadosGrafo.noFinalLabel(),
                 scanner
         );
     }
 
     private static void executarBonus() {
-        System.out.println("\n--- Executando Bônus (Dijkstra com Fita) ---");
+        System.out.println("\n--- Executando Bônus (Dijkstra com Fita Limitada) ---");
+        try {
+            System.out.print("Qual o comprimento do fio? ");
+            int limiteFio = scanner.nextInt();
+            scanner.nextLine();
+
+            Dijkstra.executar(
+                    dadosGrafo.grafo(),
+                    dadosGrafo.noInicialLabel(),
+                    dadosGrafo.noFinalLabel(),
+                    limiteFio,
+                    scanner
+            );
+        } catch (InputMismatchException e) {
+            System.out.println("Erro: Por favor, digite um número inteiro para o comprimento do fio.");
+            scanner.nextLine();
+        }
     }
 }
